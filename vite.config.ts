@@ -4,9 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'url'
 
 
-
-
-
 export default defineConfig({
   plugins: [
     vue(),
