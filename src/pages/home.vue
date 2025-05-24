@@ -176,15 +176,6 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
-
-            <!-- Agar local video bo‘lsa -->
-            <video
-              v-else
-              :src="video.src"
-              controls
-              class="aspect-[9/16] h-[300px] sm:h-[400px] md:h-[600px] object-contain rounded-lg transition-all duration-700 ease-in-out mx-auto"
-              onerror="this.src='fallback-video.mp4'"
-            ></video>
           </div>
         </div>
 
