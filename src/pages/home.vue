@@ -167,8 +167,20 @@
               'opacity-50 scale-90 z-0': index !== currentVideoIndex,
             }"
           >
+            <!-- Agar YouTube bo‘lsa -->
+            <iframe
+              v-if="video.type === 'youtube'"
+              class="aspect-[9/16] h-[300px] sm:h-[400px] md:h-[600px] rounded-lg mx-auto"
+              :src="`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+
+            <!-- Agar local video bo‘lsa -->
             <video
-              :src="video"
+              v-else
+              :src="video.src"
               controls
               class="aspect-[9/16] h-[300px] sm:h-[400px] md:h-[600px] object-contain rounded-lg transition-all duration-700 ease-in-out mx-auto"
               onerror="this.src='fallback-video.mp4'"
@@ -318,9 +330,18 @@ function prevVideo() {
 }
 
 const videos = [
-  new URL('../assets/video1.mp4', import.meta.url).href,
-  new URL('../assets/video2.mp4', import.meta.url).href,
-  new URL('../assets/video3.mp4', import.meta.url).href,
+  {
+    type: 'youtube',
+    id: '3I6gwFPhCNA',
+  },
+  {
+    type: 'youtube',
+    id: '3I6gwFPhCNA',
+  },
+  {
+    type: 'youtube',
+    id: '3I6gwFPhCNA',
+  },
 ]
 </script>
 
