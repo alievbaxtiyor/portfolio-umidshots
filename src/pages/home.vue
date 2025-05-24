@@ -99,13 +99,6 @@
           </div>
         </div>
       </div>
-      <audio ref="bgMusic" :src="musicFile" loop></audio>
-
-      <!-- Tugma orqali musiqa boshlatish -->
-      <button class="music-btn" @click="toggleMusic">
-        <span class="icon">{{ isPlaying ? '🎵' : '🔇' }}</span>
-        {{ isPlaying ? 'Musiqa yoqilgan' : 'Musiqa o‘chirilgan' }}
-      </button>
     </section>
 
     <!-- About Section -->
@@ -116,7 +109,6 @@
       <div
         class="container mx-auto px-4 sm:px-8 md:px-24 flex flex-col-reverse md:flex-row items-center justify-between gap-10 md:gap-20"
       >
-        <!-- Text Part -->
         <div class="w-full md:w-1/2 text-center md:text-left">
           <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
             Men haqimda
@@ -133,7 +125,6 @@
           </p>
         </div>
 
-        <!-- Image Part -->
         <div
           class="w-48 h-48 sm:w-60 sm:h-60 md:w-96 md:h-[26rem] rounded-2xl overflow-hidden shadow-lg border-4 border-white"
         >
@@ -149,11 +140,6 @@
 
     <!-- Works Section -->
     <section id="works" class="bg-black text-white py-16">
-      <div class="container mx-auto px-24">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
-          Ishlarim
-        </h2>
-      </div>
       <div
         class="relative w-full max-w-5xl mx-auto flex items-center justify-center overflow-hidden px-4"
       >
@@ -165,12 +151,7 @@
             v-for="(video, index) in videos"
             :key="index"
             class="carousel-item w-full flex-shrink-0 px-2 sm:px-4 relative"
-            :class="{
-              'opacity-100 scale-100 z-10': index === currentVideoIndex,
-              'opacity-50 scale-90 z-0': index !== currentVideoIndex,
-            }"
           >
-            <!-- Agar YouTube bo‘lsa -->
             <iframe
               v-if="video.type === 'youtube'"
               class="aspect-[9/16] h-[300px] sm:h-[400px] md:h-[600px] rounded-lg mx-auto"
@@ -181,24 +162,6 @@
             ></iframe>
           </div>
         </div>
-
-        <!-- Left Button -->
-        <button
-          @click="prevVideo"
-          class="nav-button left-2 sm:left-4"
-          aria-label="Previous video"
-        >
-          <font-awesome-icon icon="fa-arrow-left" />
-        </button>
-
-        <!-- Right Button -->
-        <button
-          @click="nextVideo"
-          class="nav-button right-2 sm:right-4"
-          aria-label="Next video"
-        >
-          <font-awesome-icon icon="fa-arrow-right" />
-        </button>
       </div>
     </section>
 
@@ -250,15 +213,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BackVideo from '../assets/background-video.mp4'
 import HeroPicture from '../assets/hero-picture.png'
-import musicPath from '../assets/background-music.mp3'
 
-const isMuted = ref(false)
-const bgMusic = ref<HTMLAudioElement | null>(null)
-const musicFile = musicPath
 const isOpen = ref(false)
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
@@ -267,29 +226,12 @@ const toggleMenu = () => {
 const { t, locale } = useI18n()
 const currentLocale = ref(locale.value)
 
-function playMusic() {
-  if (bgMusic.value) {
-    bgMusic.value.play().catch((err) => {
-      console.warn('Audio autoplay bloklandi:', err)
-    })
-  }
-}
-
 function onLanguageChange() {
   locale.value = currentLocale.value
   localStorage.setItem('locale', currentLocale.value)
 }
 
 const currentVideoIndex = ref(0)
-
-function nextVideo() {
-  currentVideoIndex.value = (currentVideoIndex.value + 1) % videos.length
-}
-
-function prevVideo() {
-  currentVideoIndex.value =
-    (currentVideoIndex.value - 1 + videos.length) % videos.length
-}
 
 const videos = [
   {
@@ -305,31 +247,6 @@ const videos = [
     id: '3I6gwFPhCNA',
   },
 ]
-
-onMounted(() => {
-  if (bgMusic.value) {
-    bgMusic.value.volume = 1
-  }
-})
-const isPlaying = ref(false)
-
-function toggleMusic() {
-  if (!bgMusic.value) return
-
-  if (isPlaying.value) {
-    bgMusic.value.pause()
-    isPlaying.value = false
-  } else {
-    bgMusic.value
-      .play()
-      .then(() => {
-        isPlaying.value = true
-      })
-      .catch((err) => {
-        console.warn('Play failed:', err)
-      })
-  }
-}
 </script>
 
 <style scoped>
@@ -351,30 +268,6 @@ function toggleMusic() {
   width: 100%;
 }
 
-.nav-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #6f00a9;
-  color: white;
-  font-size: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease;
-  z-index: 20;
-}
-
-.nav-button:hover {
-  background-color: #7c1ab8;
-  transform: translateY(-50%) scale(1.1);
-}
-
 .carousel-track {
   width: 100%;
   display: flex;
@@ -383,10 +276,5 @@ function toggleMusic() {
 .carousel-item {
   transition: all 0.7s ease;
   transform-origin: center;
-}
-
-.carousel-item.scale-90 {
-  transform: scale(0.9);
-  filter: blur(2px);
 }
 </style>
