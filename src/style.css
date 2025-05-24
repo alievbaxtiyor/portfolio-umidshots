@@ -1,10 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400..900&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
-
-html{
+html {
   scroll-behavior: smooth;
-
 }
 
 :root {
@@ -24,18 +22,11 @@ html{
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
-
 body {
   margin: 0;
-  padding: 0; 
+  padding: 0;
   font-family: 'Orbitron', sans-serif;
 }
-
-
-
-
 
 button {
   border-radius: 8px;
@@ -60,7 +51,6 @@ button:focus-visible {
 
 #app {
   margin: 0 auto;
-  
 }
 
 /* Global scroll dizayn */
@@ -73,7 +63,7 @@ button:focus-visible {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #6F00A9; /* Scroll o‘zi */
+  background-color: #6f00a9; /* Scroll o‘zi */
   border-radius: 8px;
   border: 2px solid #1f1f1f; /* Ichki o‘rtasidagi bo‘sh joy */
 }
@@ -87,8 +77,52 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
-  
+
   button {
     background-color: #f9f9f9;
+  }
+}
+
+.music-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, #6f00a9, #9b27af);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.music-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(111, 0, 169, 0.5);
+}
+
+.music-btn:active {
+  transform: scale(0.97);
+}
+
+.icon {
+  font-size: 20px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
   }
 }

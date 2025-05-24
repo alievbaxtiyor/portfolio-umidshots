@@ -5,7 +5,7 @@
       class="fixed top-0 left-0 w-full bg-[var(--superDark)] shadow-md z-50"
     >
       <div
-        class="container mx-auto px-4 py-4 flex justify-between items-center"
+        class="container mx-auto px-24 py-4 flex justify-between items-center"
       >
         <div>
           <h1
@@ -22,7 +22,6 @@
             <a href="#about" class="nav-link">Men haqimda</a>
             <a href="#works" class="nav-link">Ishlarim</a>
             <a href="#testimonials" class="nav-link">Mijozlar fikri</a>
-            <a href="#services" class="nav-link">Xizmatlar</a>
             <a href="#contact" class="nav-link">Aloqa</a>
           </nav>
         </div>
@@ -56,9 +55,6 @@
         >
         <a href="#testimonials" class="block text-gray-300 hover:text-blue-500"
           >Mijozlar fikri</a
-        >
-        <a href="#services" class="block text-gray-300 hover:text-blue-500"
-          >Xizmatlar</a
         >
         <a href="#contact" class="block text-gray-300 hover:text-blue-500"
           >Aloqa</a
@@ -103,6 +99,13 @@
           </div>
         </div>
       </div>
+      <audio ref="bgMusic" :src="musicFile" loop></audio>
+
+      <!-- Tugma orqali musiqa boshlatish -->
+      <button class="music-btn" @click="toggleMusic">
+        <span class="icon">{{ isPlaying ? '🎵' : '🔇' }}</span>
+        {{ isPlaying ? 'Musiqa yoqilgan' : 'Musiqa o‘chirilgan' }}
+      </button>
     </section>
 
     <!-- About Section -->
@@ -225,50 +228,6 @@
       </div>
     </section>
 
-    <!-- Services -->
-    <section
-      id="services"
-      class="bg-black text-white min-h-screen flex items-center"
-    >
-      <div class="container mx-auto px-4 sm:px-8 md:px-24 text-center">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-10">
-          Xizmatlar
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          <div
-            class="bg-[var(--superDark)] p-6 rounded-xl shadow-md hover:shadow-xl transition"
-          >
-            <h3 class="text-xl font-semibold text-[#9f67ff] mb-2">
-              Reklama roliklari
-            </h3>
-            <p class="text-gray-300 text-sm">
-              Mahsulotingizni taqdim etishda professional yondashuv.
-            </p>
-          </div>
-          <div
-            class="bg-[var(--superDark)] p-6 rounded-xl shadow-md hover:shadow-xl transition"
-          >
-            <h3 class="text-xl font-semibold text-[#9f67ff] mb-2">
-              To‘y & Tadbirlar
-            </h3>
-            <p class="text-gray-300 text-sm">
-              Unutilmas onlarni sifatli videoga aylantirish.
-            </p>
-          </div>
-          <div
-            class="bg-[var(--superDark)] p-6 rounded-xl shadow-md hover:shadow-xl transition"
-          >
-            <h3 class="text-xl font-semibold text-[#9f67ff] mb-2">
-              Kontent ishlab chiqarish
-            </h3>
-            <p class="text-gray-300 text-sm">
-              Ijtimoiy tarmoqlar uchun doimiy kontent yaratish xizmati.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Contact -->
     <section
       id="contact"
@@ -291,11 +250,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BackVideo from '../assets/background-video.mp4'
 import HeroPicture from '../assets/hero-picture.png'
+import musicPath from '../assets/background-music.mp3'
 
+const isMuted = ref(false)
+const bgMusic = ref<HTMLAudioElement | null>(null)
+const musicFile = musicPath
 const isOpen = ref(false)
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
@@ -303,6 +266,14 @@ const toggleMenu = () => {
 
 const { t, locale } = useI18n()
 const currentLocale = ref(locale.value)
+
+function playMusic() {
+  if (bgMusic.value) {
+    bgMusic.value.play().catch((err) => {
+      console.warn('Audio autoplay bloklandi:', err)
+    })
+  }
+}
 
 function onLanguageChange() {
   locale.value = currentLocale.value
@@ -334,6 +305,31 @@ const videos = [
     id: '3I6gwFPhCNA',
   },
 ]
+
+onMounted(() => {
+  if (bgMusic.value) {
+    bgMusic.value.volume = 1
+  }
+})
+const isPlaying = ref(false)
+
+function toggleMusic() {
+  if (!bgMusic.value) return
+
+  if (isPlaying.value) {
+    bgMusic.value.pause()
+    isPlaying.value = false
+  } else {
+    bgMusic.value
+      .play()
+      .then(() => {
+        isPlaying.value = true
+      })
+      .catch((err) => {
+        console.warn('Play failed:', err)
+      })
+  }
+}
 </script>
 
 <style scoped>
